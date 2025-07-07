@@ -1,52 +1,72 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <unistd.h>
-#include <sys/mman.h> // has memory map functions
-#include <fcntl.h> // file control options
+#include <sys/mman.h>
+#include <fcntl.h>
 #include <stdlib.h>
 
-#define GPIO_BASE     0x42000000  // address of gpio base 
-#define BRAM_BASE     0x40000000  // address of BRAM base
-#define NUM_SAMPLES   1024 // samples to collect
+#define GPIO_BASE     0x42000000  // GPIO base address
+#define BRAM_BASE     0x40000000  // BRAM base address
+#define NUM_SAMPLES   1024        // Samples per trigger
+#define TRIGGER_MASK  0x1         // Bit used for trigger
 
-volatile uint32_t *gpio_in;
+volatile uint32_t *gpio_out;
 volatile uint32_t *bram_ptr;
 
-int main() {
+void pulse_trigger() {
+    *gpio_out = TRIGGER_MASK;
+    usleep(10); // small delay to register the edge
+    *gpio_out = 0;
+    usleep(10); // allow FSM to detect falling edge
+}
 
-    int trigger;
-    int fd = open("/dev/mem", O_RDWR | O_SYNC); // gives users space-access to physical memory address
+int main(int argc, char *argv[]) {
+    if (argc < 2) {
+        printf("Usage: %s <trigger_count>\n", argv[0]);
+        return -1;
+    }
+
+    int trigger_count = atoi(argv[1]); // number of extra triggers
+    int total_cycles = trigger_count + 1;
+
+    // Memory map
+    int fd = open("/dev/mem", O_RDWR | O_SYNC);
     if (fd < 0) { perror("open"); return -1; }
 
-    void *gpio = mmap(NULL, sysconf(_SC_PAGESIZE), PROT_READ | PROT_WRITE, MAP_SHARED, fd, GPIO_BASE); //assigning gpio base address to gpio pointer
+    void *gpio = mmap(NULL, sysconf(_SC_PAGESIZE), PROT_READ | PROT_WRITE, MAP_SHARED, fd, GPIO_BASE);
     if (gpio == MAP_FAILED) { perror("mmap gpio"); return -1; }
 
-    void *bram = mmap(NULL, sysconf(_SC_PAGESIZE), PROT_READ, MAP_SHARED, fd, BRAM_BASE); // assigning BRAM base to bram pointer 
+    void *bram = mmap(NULL, sysconf(_SC_PAGESIZE), PROT_READ, MAP_SHARED, fd, BRAM_BASE);
     if (bram == MAP_FAILED) { perror("mmap bram"); return -1; }
 
-    gpio_in  = (uint32_t *)(gpio + 0x0);      // GPIO channel 2 input    
-    printf("GPIO_IN = 0x%08X\n", *gpio_in);
+    gpio_out  = (uint32_t *)(gpio + 0x0); //assiging the value at the address
+    bram_ptr  = (uint32_t *)(bram);
 
-    // Wait for done
-    printf("Waiting for done signal...\n");
-    // while (((*gpio_in) & 0x1) == 0);  // while loop to run until gpio_in & 1 = 0
-    usleep(1000);
+    // Trigger n times
+    for (int t = 0; t < trigger_count; t++) {
+        printf("Trigger %d...\n", t + 1);
+        pulse_trigger();
 
-    printf("Done detected, Reading samples...\n");
+        // Optionally wait some time if your FSM takes time
+        usleep(500); 
+    }
 
-    FILE *f = fopen("adc_data.txt", "w"); // open file to write 
+    // Read all data: total_samples = total_cycles × NUM_SAMPLES
+    FILE *f = fopen("adc_data.txt", "w");
     if (!f) { perror("fopen"); return -1; }
 
-    for (int i = 0; i < NUM_SAMPLES; i++) { // write down all samples collected 
-      fprintf(f, "%d\n",(*((uint32_t *)(bram + 4*i))));  // int16 and uint cause we want signed 
-      printf("values no %d = %d\n",i,(*((uint32_t *)(bram+ 4*i))));
+    int total_samples = total_cycles * NUM_SAMPLES;
+    for (int i = 0; i < total_samples; i++) {
+        uint32_t sample = bram_ptr[i];
+        fprintf(f, "%d\n", sample);
+        printf("Sample[%d] = %d\n", i, sample);
     }
 
     fclose(f);
-    munmap((void *)gpio, sysconf(_SC_PAGESIZE)); // unmapping memory 
+    munmap((void *)gpio, sysconf(_SC_PAGESIZE));
     munmap((void *)bram, sysconf(_SC_PAGESIZE));
     close(fd);
 
-    printf("ADC data stored in adc_data.txt\n");
+    printf("Done. %d samples written to adc_data.txt\n", total_samples);
     return 0;
 }
