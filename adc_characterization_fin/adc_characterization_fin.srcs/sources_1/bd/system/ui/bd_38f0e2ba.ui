@@ -1,0 +1,36 @@
+{
+   "ActiveEmotionalView":"Default View",
+   "Default View_ScaleFactor":"1.0",
+   "Default View_TopLeft":"-319,-38",
+   "ExpandedHierarchyInLayout":"",
+   "guistr":"# # String gsaved with Nlview 7.8.0 2024-04-26 e1825d835c VDI=44 GEI=38 GUI=JA:21.0 TLS
+#  -string -flagsOSRD
+preplace port S_AXI -pg 1 -lvl 0 -x 0 -y 170 -defaultsOSRD
+preplace port port-id_clka -pg 1 -lvl 0 -x 0 -y 300 -defaultsOSRD
+preplace port port-id_rsta -pg 1 -lvl 0 -x 0 -y 320 -defaultsOSRD
+preplace port port-id_trigger -pg 1 -lvl 0 -x 0 -y 390 -defaultsOSRD
+preplace port port-id_ena -pg 1 -lvl 0 -x 0 -y 280 -defaultsOSRD
+preplace port port-id_s_axi_aclk -pg 1 -lvl 0 -x 0 -y 190 -defaultsOSRD
+preplace port port-id_s_axi_aresetn -pg 1 -lvl 0 -x 0 -y 210 -defaultsOSRD
+preplace port port-id_done -pg 1 -lvl 3 -x 610 -y -10 -defaultsOSRD
+preplace portBus dina -pg 1 -lvl 0 -x 0 -y 110 -defaultsOSRD
+preplace inst Counter_control_acc_0 -pg 1 -lvl 1 -x 160 -y 370 -defaultsOSRD
+preplace inst blk_mem_gen_1 -pg 1 -lvl 2 -x 470 -y 120 -defaultsOSRD
+preplace inst axi_bram_ctrl_0 -pg 1 -lvl 1 -x 160 -y 190 -defaultsOSRD
+preplace netloc ACC_0_done 1 0 1 NJ 390
+preplace netloc Counter_control_acc_0_bram_addr 1 1 1 320 80n
+preplace netloc Counter_control_acc_0_done 1 1 2 310J -10 NJ
+preplace netloc Counter_control_acc_0_wea 1 1 1 350 160n
+preplace netloc DataAcquisition_adc_clk 1 0 2 30 270 290J
+preplace netloc FFT_m_axis_data_tvalid 1 0 2 NJ 280 330J
+preplace netloc blk_mem_gen_0_doutb 1 0 2 NJ 110 300J
+preplace netloc processing_system7_0_FCLK_CLK0 1 0 1 NJ 190
+preplace netloc rst_n_1 1 0 1 20 320n
+preplace netloc rst_ps7_0_125M_peripheral_aresetn 1 0 1 NJ 210
+preplace netloc PS7_M01_AXI 1 0 1 NJ 170
+preplace netloc axi_bram_ctrl_0_BRAM_PORTA 1 1 1 340 180n
+levelinfo -pg 1 0 160 470 610
+pagesize -pg 1 -db -bbox -sgen -150 -30 690 440
+"
+}
+0

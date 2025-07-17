@@ -1,0 +1,24 @@
+#-----------------------------------------------------------
+# Vivado v2024.2 (64-bit)
+# SW Build 5239630 on Fri Nov 08 22:34:34 MST 2024
+# IP Build 5239520 on Sun Nov 10 16:12:51 MST 2024
+# SharedData Build 5239561 on Fri Nov 08 14:39:27 MST 2024
+# Start of session at: Thu Jul 17 12:15:49 2025
+# Process ID         : 148636
+# Current directory  : /home/nehaal-raj/vivado_projects/Digital_correlator/adc_characterization_fin/adc_characterization_fin.runs/impl_1
+# Command line       : vivado -log system_wrapper.vdi -applog -product Vivado -messageDb vivado.pb -mode batch -source system_wrapper.tcl -notrace
+# Log file           : /home/nehaal-raj/vivado_projects/Digital_correlator/adc_characterization_fin/adc_characterization_fin.runs/impl_1/system_wrapper.vdi
+# Journal file       : /home/nehaal-raj/vivado_projects/Digital_correlator/adc_characterization_fin/adc_characterization_fin.runs/impl_1/vivado.jou
+# Running On         : nehaal-raj-Inspiron-15-5518
+# Platform           : Ubuntu
+# Operating System   : Ubuntu 24.04.2 LTS
+# Processor Detail   : 11th Gen Intel(R) Core(TM) i5-11320H @ 3.20GHz
+# CPU Frequency      : 4051.337 MHz
+# CPU Physical cores : 4
+# CPU Logical cores  : 8
+# Host memory        : 16500 MB
+# Swap memory        : 4294 MB
+# Total Virtual      : 20795 MB
+# Available Virtual  : 11843 MB
+#-----------------------------------------------------------
+source system_wrapper.tcl -notrace
