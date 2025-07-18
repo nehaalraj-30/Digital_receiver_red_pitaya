@@ -32,3 +32,9 @@ Prerequisites
     Memory-mapped I/O on Zynq using /dev/mem
 
     ADC interfacing with Red Pitaya (via adc_dat_a_i, adc_clk_p/n_i 
+
+To Run:
+1)    Donwload the folder present
+2)    Open teh .xpr file and genrate Bitstream.
+3)    Ruin teh c file on the Red Pitaya.
+4)    SCP the output file onto PC and run the python file.
